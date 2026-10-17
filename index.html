@@ -1,0 +1,757 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>물방울의 여행 | 어게인 실험과학 수학학원</title>
+<meta name="description" content="방울이를 따라 뿌리에서 잎의 기공까지, 증산 작용 체험 활동">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --main:#2f9e57; --main-dark:#21794a; --main-shadow:#1d6b40; --soft:#e8f6ec; --soft-line:#a9dcb9;
+  --water:#3aa0e0; --water-soft:#e6f4fc; --water-line:#a9d6f2;
+  --soil:#a8662b; --soil-soft:#fbf1e6; --soil-line:#e9c9a4;
+  --sun:#f5c84c; --sun-soft:#fffbea; --sun-line:#f3df8f;
+  --ink:#33402f; --sub:#6f786b; --line:#e4eae0; --bg:#ffffff; --card:#fbfdf9;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans KR",system-ui,sans-serif;font-weight:500}
+body{min-height:100vh;display:flex;flex-direction:column;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;overflow-x:hidden}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+[hidden]{display:none!important}
+svg text{font-family:"Jua",sans-serif}
+
+header{background:#fff;border-bottom:3px solid var(--soft);padding:10px 16px}
+.head-in{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:12px}
+.logo{width:52px;height:52px;border-radius:16px;background:var(--water);display:grid;place-items:center;flex:none}
+.titles{flex:1;min-width:0}
+.titles .brand{font-family:"Jua",sans-serif;font-size:16px;color:var(--sub)}
+.titles h1{margin:2px 0 0;font-family:"Jua",sans-serif;font-weight:400;font-size:clamp(24px,3.8vw,36px);color:var(--main-dark);line-height:1.2;word-break:keep-all}
+.share{flex:none;display:flex;align-items:center;justify-content:center;gap:8px;background:var(--main);color:#fff;font-family:"Jua",sans-serif;font-size:21px;min-height:80px;min-width:80px;padding:0 24px;border-radius:999px;box-shadow:0 5px 0 var(--main-shadow)}
+.share:active{transform:translateY(4px);box-shadow:0 1px 0 var(--main-shadow)}
+
+nav{max-width:1100px;margin:14px auto 0;padding:0 16px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;width:100%}
+.tab{position:relative;min-height:80px;border-radius:20px;background:#f3f6f1;font-family:"Jua",sans-serif;font-size:clamp(16px,2.2vw,22px);line-height:1.25;padding:8px;border:3px solid transparent;word-break:keep-all;transition:.15s}
+.tab.on{background:var(--soft);border-color:var(--main);color:var(--main-dark)}
+.tab .star{position:absolute;top:-10px;right:-4px;font-size:24px;display:none}
+.tab.done .star{display:block;animation:pop .5s}
+
+main{max-width:1100px;margin:0 auto;padding:16px;width:100%}
+.panel{display:none;animation:fadein .3s}
+.panel.on{display:block}
+.guide{font-family:"Jua",sans-serif;font-size:clamp(18px,2.4vw,24px);margin:4px 0 12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;word-break:keep-all}
+.guide .q{background:var(--main);color:#fff;border-radius:12px;padding:2px 10px;font-size:.8em}
+.msg{margin:14px auto 0;max-width:860px;min-height:72px;border-radius:20px;background:var(--soft);border:3px dashed var(--soft-line);padding:14px 18px;font-family:"Jua",sans-serif;font-size:clamp(18px,2.4vw,23px);text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.45;word-break:keep-all}
+.msg b{font-weight:400;color:var(--main-dark)}
+.msg small{font-size:.75em;color:var(--sub)}
+.msg.good{background:#eaf8ef;border-color:#9fdcb7;animation:pop .45s}
+.msg.warn{background:#fff6e5;border-color:#f6d39a;color:#9a5c00;animation:shake .4s}
+.big-btn{font-family:"Jua",sans-serif;font-size:22px;min-height:80px;padding:10px 28px;border-radius:999px;background:var(--main);color:#fff;box-shadow:0 5px 0 var(--main-shadow)}
+.big-btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--main-shadow)}
+.big-btn:disabled{opacity:.4}
+.soft-btn{font-family:"Jua",sans-serif;font-size:20px;min-height:80px;min-width:80px;padding:8px 24px;border-radius:999px;background:#f1f3ee;color:var(--sub)}
+.row{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:12px}
+.stage{background:#fff;border:3px solid var(--line);border-radius:24px;padding:10px 8px 8px;text-align:center}
+.stage svg{display:block;margin:0 auto;width:100%;height:auto}
+
+/* 1. 방울이 따라가기 */
+.t1{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:16px;align-items:stretch}
+#tripSvg{max-height:min(600px,62vh);touch-action:none}
+.side{display:flex;flex-direction:column;gap:12px;min-width:0}
+.side .msg{margin:0;max-width:none}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.steps span{font-family:"Jua",sans-serif;font-size:17px;text-align:center;padding:8px 2px;border-radius:14px;background:#f3f6f1;color:#a3aa9f}
+.steps span.on{background:var(--water-soft);color:#1f6fa3;animation:pop .4s}
+.zoom{flex:1;background:var(--water-soft);border:3px dashed var(--water-line);border-radius:24px;display:flex;align-items:center;justify-content:center;padding:12px;min-height:170px;text-align:center}
+.zoom.open{background:#fff;border-style:solid}
+.zoom-empty{font-family:"Jua",sans-serif;font-size:20px;color:#1f6fa3;line-height:1.5;word-break:keep-all}
+.zoom-empty .ic{font-size:50px;line-height:1.1}
+.zoom svg{width:100%;max-width:230px;height:auto;animation:pop .5s}
+.zoom p{margin:4px 0 0;font-family:"Jua",sans-serif;font-size:20px;line-height:1.45;word-break:keep-all}
+.zoom p b{font-weight:400;color:var(--main-dark)}
+.lab{fill:#b9c0b4;transition:fill .3s}
+.lab.on{fill:var(--main-dark)}
+.guidePath{animation:flow 1.2s linear infinite}
+.bangul{cursor:grab}
+.bangul.go{transition:opacity 1s}
+.wisp{opacity:0}
+.wisp.go{animation:wisp 2.6s ease-out forwards}
+.merc{transition:y 1.6s ease,height 1.6s ease}
+
+/* 2. 봉지 실험 */
+.t2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.tube-card{background:#fff;border:3px solid var(--line);border-radius:24px;padding:10px;text-align:center}
+.tube-card h3{margin:0 0 6px;font-family:"Jua",sans-serif;font-weight:400;font-size:24px;color:var(--main-dark)}
+.tog{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#f3f6f1;border-radius:999px;padding:5px}
+.tog button{min-height:64px;border-radius:999px;font-family:"Jua",sans-serif;font-size:clamp(17px,2.2vw,21px);color:var(--sub)}
+.tog button.on{background:var(--main);color:#fff}
+.tube-card svg{max-height:min(430px,48vh);margin-top:6px}
+.result{font-family:"Jua",sans-serif;font-size:20px;min-height:32px;color:#1f6fa3}
+.controls{display:flex;gap:16px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.sunbox{flex:1;min-width:260px;max-width:460px;background:var(--sun-soft);border:3px solid var(--sun-line);border-radius:24px;padding:10px 18px 8px}
+.sunbox .h{font-family:"Jua",sans-serif;font-size:21px;color:#8a6500;display:flex;align-items:center;gap:8px}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:56px;background:none;margin:2px 0;touch-action:none}
+input[type=range]::-webkit-slider-runnable-track{height:14px;border-radius:99px;background:linear-gradient(90deg,#fff2c2,#f5c84c,#ff9f1c)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:52px;height:52px;margin-top:-19px;border-radius:50%;background:#fff;border:7px solid #f5a623;box-shadow:0 3px 6px rgba(0,0,0,.2)}
+input[type=range]::-moz-range-track{height:14px;border-radius:99px;background:linear-gradient(90deg,#fff2c2,#f5c84c,#ff9f1c)}
+input[type=range]::-moz-range-thumb{width:40px;height:40px;border-radius:50%;background:#fff;border:7px solid #f5a623}
+.sunlabels{display:flex;justify-content:space-between;font-family:"Jua",sans-serif;font-size:19px;color:#a3aa9f}
+.sunlabels span.on{color:#8a6500}
+.clock{width:84px;height:84px;flex:none}
+.clock .hand{transform-origin:50px 50px;transition:transform 2s ease-in-out}
+.clock-t{font-family:"Jua",sans-serif;font-size:20px;color:var(--sub);min-width:56px}
+
+/* 3. 무순과 보리 */
+#sproutSvg{max-height:min(470px,55vh)}
+.pbtns{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.pbtn{min-height:80px;border-radius:20px;background:var(--sun-soft);border:3px solid var(--sun-line);font-family:"Jua",sans-serif;font-size:clamp(18px,2.4vw,23px);color:#8a6500}
+.pbtn.on{background:var(--sun);border-color:#e0ac1c;color:#4d3800}
+.pbtn.seen::after{content:" ✓"}
+.part{transition:filter .3s}
+.part.hl{filter:drop-shadow(0 0 5px #ffc400) drop-shadow(0 0 3px #ffc400);animation:pulse 1.4s ease-in-out infinite}
+.vein{stroke:#4e9a46;transition:stroke .3s,stroke-width .3s}
+.part.hl .vein{stroke:#ff8a00;stroke-width:2.6}
+.plab{opacity:0;transition:opacity .4s}
+.plab.on{opacity:1}
+.sort{margin-top:18px;animation:fadein .4s}
+.zones{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.zone{border-radius:24px;border:4px dashed;min-height:170px;padding:10px;transition:transform .15s;display:flex;flex-direction:column}
+.zone.di{background:var(--soft);border-color:var(--soft-line)}
+.zone.mo{background:var(--sun-soft);border-color:var(--sun-line)}
+.zone.over{transform:scale(1.02);border-style:solid}
+.zone-h{font-family:"Jua",sans-serif;font-size:clamp(20px,2.6vw,27px);text-align:center;padding:4px 0 2px;word-break:keep-all}
+.zone-h small{display:block;font-size:.6em;color:var(--sub)}
+.zone-in{flex:1;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-content:flex-start;padding-top:6px}
+.cards{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:14px}
+.pcard{background:var(--card);border:3px solid var(--line);border-radius:20px;min-height:110px;display:flex;flex-direction:column;align-items:center;justify-content:center;touch-action:none;cursor:grab;box-shadow:0 4px 0 var(--line);font-family:"Jua",sans-serif;font-size:21px}
+.pcard .em{font-size:40px;line-height:1.1}
+.pcard.back{animation:shake .4s}
+.chip{background:#fff;border-radius:16px;padding:6px 12px;font-family:"Jua",sans-serif;font-size:20px;box-shadow:0 3px 0 rgba(0,0,0,.06);animation:pop .45s}
+.ghost{position:fixed;z-index:50;pointer-events:none;transform:translate(-50%,-60%) scale(1.1);filter:drop-shadow(0 8px 8px rgba(0,0,0,.25))}
+
+/* 4. OX 퀴즈 */
+.quiz{max-width:760px;margin:0 auto;text-align:center}
+.qtop{display:flex;justify-content:space-between;font-family:"Jua",sans-serif;font-size:21px;color:var(--sub)}
+.qtop b{color:var(--main);font-weight:400}
+.qcard{margin-top:10px;background:var(--water-soft);border:3px solid var(--water-line);border-radius:28px;padding:30px 20px;font-family:"Jua",sans-serif;font-size:clamp(23px,3.4vw,32px);line-height:1.45;word-break:keep-all;min-height:150px;display:flex;align-items:center;justify-content:center}
+.ox{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.ox button{min-height:120px;border-radius:28px;font-family:"Jua",sans-serif;font-size:72px;line-height:1;color:#fff}
+.ox .o{background:#3aa0e0;box-shadow:0 6px 0 #2479b0}
+.ox .x{background:#ef6a5f;box-shadow:0 6px 0 #c4483e}
+.ox button:active{transform:translateY(4px);box-shadow:none}
+.ox button:disabled{opacity:.35}
+
+footer{margin-top:24px;background:#33402f;color:#fff;text-align:center;padding:20px 16px 26px;font-family:"Jua",sans-serif;font-size:19px;line-height:1.6}
+.toast{position:fixed;left:50%;bottom:30px;transform:translate(-50%,40px);opacity:0;background:#33402f;color:#fff;font-family:"Jua",sans-serif;font-size:20px;padding:14px 26px;border-radius:999px;z-index:70;transition:.25s;pointer-events:none;white-space:nowrap}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:60}
+.finale{position:fixed;inset:0;z-index:58;background:rgba(30,45,30,.45);display:grid;place-items:center;padding:16px;animation:fadein .3s}
+.finale-card{background:#fff;border-radius:30px;padding:28px 26px 22px;text-align:center;max-width:520px;width:100%;box-shadow:0 12px 30px rgba(0,0,0,.25);animation:pop .55s}
+.finale-card .big{font-size:72px;line-height:1}
+.finale-card h2{margin:10px 0 6px;font-family:"Jua",sans-serif;font-weight:400;font-size:clamp(28px,4.4vw,38px);color:var(--main-dark);line-height:1.3;word-break:keep-all}
+.finale-card .path{font-family:"Jua",sans-serif;font-size:20px;color:var(--sub);margin-bottom:18px;word-break:keep-all}
+
+@keyframes fadein{from{opacity:0;transform:translateY(8px)}}
+@keyframes pop{0%{transform:scale(.7)}60%{transform:scale(1.06)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@keyframes flow{to{stroke-dashoffset:-20}}
+@keyframes pulse{50%{opacity:.75}}
+@keyframes wisp{0%{opacity:0;transform:translate(0,0)}25%{opacity:.85}100%{opacity:0;transform:translate(70px,40px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media (max-width:860px){
+  .t1{grid-template-columns:1fr}
+  .cards{grid-template-columns:repeat(3,1fr)}
+}
+@media (max-width:560px){
+  nav{grid-template-columns:repeat(2,1fr)}
+  .tab{font-size:17px;min-height:64px}
+  .share{font-size:17px;min-height:60px;min-width:60px;padding:0 14px}
+  .share span{display:none}
+  .logo{width:44px;height:44px}
+  .titles .brand{font-size:13px}
+  .t2,.zones{gap:8px}
+  .tube-card{padding:8px 4px}
+  .tog{grid-template-columns:1fr}
+  .tog button{min-height:54px}
+  .pbtns{gap:6px}
+  .ox button{min-height:100px}
+}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<header>
+  <div class="head-in">
+    <div class="logo" aria-hidden="true">
+      <svg width="30" height="30" viewBox="0 0 30 30"><path d="M15 3C19 9 24 14 24 19a9 9 0 0 1-18 0c0-5 5-10 9-16z" fill="#fff"/></svg>
+    </div>
+    <div class="titles">
+      <div class="brand">어게인 실험과학 수학학원</div>
+      <h1>물방울의 여행</h1>
+    </div>
+    <button class="share" id="share" aria-label="공유하기">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
+      <span>공유하기</span>
+    </button>
+  </div>
+</header>
+
+<nav id="tabs">
+  <button class="tab on" data-t="0">💧 방울이 따라가기<span class="star">⭐</span></button>
+  <button class="tab" data-t="1">🛍️ 봉지 실험<span class="star">⭐</span></button>
+  <button class="tab" data-t="2">🌱 무순과 보리<span class="star">⭐</span></button>
+  <button class="tab" data-t="3">⭕ OX 퀴즈<span class="star">⭐</span></button>
+</nav>
+
+<main>
+  <!-- 1. 방울이 따라가기 -->
+  <section class="panel on" id="p0">
+    <div class="guide"><span class="q">해 보기</span>방울이를 손가락으로 끌어서 빛나는 길을 따라가 보세요!</div>
+    <div class="t1">
+      <div class="stage">
+        <svg id="tripSvg" viewBox="0 0 640 560" aria-label="깻잎 모종 속 물의 길">
+          <defs>
+            <linearGradient id="soilG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d9b48a"/><stop offset="1" stop-color="#b98455"/></linearGradient>
+            <linearGradient id="leafG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7cc96a"/><stop offset="1" stop-color="#3f9a45"/></linearGradient>
+            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="4"/></filter>
+          </defs>
+          <rect x="0" y="360" width="640" height="200" fill="url(#soilG)"/>
+          <path d="M0 360 H640" stroke="#8f5a2a" stroke-width="4"/>
+          <g fill="#9b6a3d" opacity=".45"><circle cx="60" cy="400" r="5"/><circle cx="110" cy="450" r="4"/><circle cx="420" cy="420" r="6"/><circle cx="560" cy="470" r="5"/><circle cx="480" cy="520" r="4"/><circle cx="80" cy="530" r="6"/><circle cx="600" cy="400" r="4"/><circle cx="380" cy="510" r="5"/></g>
+          <g fill="#6fc0ef" opacity=".55"><circle cx="160" cy="470" r="5"/><circle cx="95" cy="490" r="4"/><circle cx="175" cy="535" r="4"/><circle cx="60" cy="460" r="3"/></g>
+          <!-- 뿌리 -->
+          <g fill="none" stroke="#efe3c2" stroke-linecap="round">
+            <path d="M320 362 C322 420 316 470 320 540" stroke-width="11"/>
+            <path d="M320 425 C290 440 250 465 215 478" stroke-width="7"/>
+            <path d="M321 455 C350 470 380 480 410 505" stroke-width="6"/>
+            <path d="M319 500 C300 515 280 525 262 540" stroke-width="5"/>
+          </g>
+          <g stroke="#efe3c2" stroke-width="2" stroke-linecap="round">
+            <path d="M232 471 l-6 -12 M245 466 l-4 -13 M258 460 l-3 -13 M226 476 l-10 -7 M232 473 l-4 12 M246 468 l-2 13 M260 462 l0 13 M220 480 l-11 4"/>
+            <path d="M380 482 l4 -12 M394 492 l7 -10 M370 477 l1 13"/>
+          </g>
+          <!-- 줄기 (속을 잘라 보인 모습) -->
+          <rect x="309" y="140" width="22" height="224" rx="8" fill="#6bb85a" stroke="#4e9a46" stroke-width="2"/>
+          <rect x="315" y="146" width="10" height="216" rx="5" fill="#cfeaf8" stroke="#8fc8e8" stroke-width="1.5"/>
+          <!-- 왼쪽 잎 -->
+          <path d="M310 150 C290 140 270 132 255 128" stroke="#4e9a46" stroke-width="6" fill="none" stroke-linecap="round"/>
+          <path d="M255 128 C220 70 100 60 50 95 C100 150 210 170 255 128 Z" fill="url(#leafG)" stroke="#3a8a3f" stroke-width="2"/>
+          <g fill="none" stroke="#2f7a35" stroke-width="1.6" opacity=".7"><path d="M255 128 L50 95"/><path d="M200 119 L178 80 M200 119 L182 150 M140 109 L120 76 M140 109 L125 144"/></g>
+          <!-- 오른쪽 잎 -->
+          <path d="M330 150 C350 140 370 132 385 128" stroke="#4e9a46" stroke-width="6" fill="none" stroke-linecap="round"/>
+          <path d="M385 128 C420 70 540 60 590 95 C540 150 430 170 385 128 Z" fill="url(#leafG)" stroke="#3a8a3f" stroke-width="2"/>
+          <g fill="none" stroke="#2f7a35" stroke-width="1.6" opacity=".7"><path d="M385 128 L590 95"/><path d="M430 121 L452 82 M430 121 L448 152 M480 113 L502 76 M535 104 L552 76 M535 104 L552 128"/></g>
+          <path d="M320 140 C316 120 322 106 330 98 C334 112 330 128 320 140 Z" fill="#7cc96a" stroke="#3a8a3f" stroke-width="1.5"/>
+          <!-- 기공 -->
+          <ellipse cx="507" cy="142" rx="5" ry="3" fill="#2a5f2e" transform="rotate(-25 507 142)"/>
+          <!-- 온도계 -->
+          <g transform="translate(612 0)">
+            <rect x="-9" y="104" width="18" height="122" rx="9" fill="#fff" stroke="#9aa59a" stroke-width="2.5"/>
+            <circle cx="0" cy="232" r="14" fill="#ef6a5f" stroke="#9aa59a" stroke-width="2.5"/>
+            <rect id="merc" class="merc" x="-4" y="128" width="8" height="104" fill="#ef6a5f"/>
+            <g stroke="#9aa59a" stroke-width="2"><path d="M9 130h-6M9 150h-6M9 170h-6M9 190h-6M9 210h-6"/></g>
+            <text x="0" y="272" text-anchor="middle" font-size="18" fill="#6f786b">잎 온도</text>
+            <text id="mercDown" x="-20" y="168" text-anchor="end" font-size="26" fill="#3aa0e0" opacity="0">↓</text>
+          </g>
+          <!-- 길 -->
+          <path id="route" d="M130 510 C170 500 195 485 215 478 C250 465 290 440 320 425 L320 362 L320 150 C345 140 365 132 385 128 L480 113 L507 141" fill="none"/>
+          <use href="#route" stroke="#ffe066" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" opacity=".55" filter="url(#glow)"/>
+          <use href="#route" class="guidePath" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-dasharray="2 18" opacity=".95"/>
+          <path id="done" d="M130 510 C170 500 195 485 215 478 C250 465 290 440 320 425 L320 362 L320 150 C345 140 365 132 385 128 L480 113 L507 141" fill="none" stroke="#3aa0e0" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- 이름표 -->
+          <text class="lab" data-s="1" x="210" y="430" font-size="26" text-anchor="middle">뿌리털</text>
+          <path d="M215 437 L228 458" stroke="#b9c0b4" stroke-width="2" class="lab-line"/>
+          <text class="lab" data-s="2" x="345" y="285" font-size="26">물관</text>
+          <text class="lab" data-s="3" x="470" y="60" font-size="26" text-anchor="middle">잎맥</text>
+          <text class="lab" data-s="4" x="518" y="186" font-size="24">기공</text>
+          <text class="lab" data-s="4" x="518" y="208" font-size="16">(잎 뒷면)</text>
+          <!-- 수증기 -->
+          <g fill="none" stroke="#9ccfee" stroke-width="4" stroke-linecap="round">
+            <path class="wisp" d="M512 150 q8 8 0 16 q-8 8 0 16"/>
+            <path class="wisp" d="M500 152 q8 8 0 16 q-8 8 0 16" style="animation-delay:.5s"/>
+            <path class="wisp" d="M524 148 q8 8 0 16 q-8 8 0 16" style="animation-delay:1s"/>
+          </g>
+          <!-- 방울이 -->
+          <g id="bangul" class="bangul" transform="translate(130 510)">
+            <circle r="44" fill="transparent"/>
+            <path d="M0 -30 C11 -16 22 -5 22 7 A22 22 0 0 1 -22 7 C-22 -5 -11 -16 0 -30Z" fill="#5fb4ea" stroke="#2f8fcf" stroke-width="2.5"/>
+            <ellipse cx="-9" cy="-3" rx="4" ry="7" fill="#fff" opacity=".7"/>
+            <circle cx="-7" cy="6" r="3" fill="#1d3b52"/><circle cx="7" cy="6" r="3" fill="#1d3b52"/>
+            <path d="M-6 14 q6 6 12 0" stroke="#1d3b52" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <circle cx="-14" cy="12" r="3" fill="#ff9aa2" opacity=".7"/><circle cx="14" cy="12" r="3" fill="#ff9aa2" opacity=".7"/>
+          </g>
+        </svg>
+      </div>
+      <div class="side">
+        <div class="steps"><span data-s="1">뿌리털</span><span data-s="2">물관</span><span data-s="3">잎맥</span><span data-s="4">기공</span></div>
+        <div class="msg" id="m0">방울이는 지금 흙 속에 있어요.<br><small>방울이를 꾹 눌러 끌어 보세요</small></div>
+        <div class="zoom" id="zoom">
+          <div class="zoom-empty"><div class="ic">🔍</div>방울이를 기공까지 데려가면<br>잎 뒷면 돋보기가 열려요</div>
+        </div>
+        <div class="row" style="margin-top:0"><button class="soft-btn" id="reset0">처음부터 다시</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. 봉지 실험 -->
+  <section class="panel" id="p1">
+    <div class="guide"><span class="q">해 보기</span>잎을 있게·없게 골라 놓고 40분을 기다려 보세요!</div>
+    <div class="t2" id="tubes"></div>
+    <div class="controls">
+      <div class="sunbox">
+        <div class="h">☀️ 햇빛 세기</div>
+        <input type="range" id="sun" min="0" max="2" step="1" value="1" aria-label="햇빛 세기">
+        <div class="sunlabels"><span>약함</span><span class="on">보통</span><span>강함</span></div>
+      </div>
+      <svg class="clock" viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="50" cy="50" r="44" fill="#fff" stroke="#33402f" stroke-width="6"/>
+        <g stroke="#33402f" stroke-width="4"><path d="M50 10v8M90 50h-8M50 90v-8M10 50h8"/></g>
+        <line class="hand" id="hand" x1="50" y1="50" x2="50" y2="18" stroke="#ef6a5f" stroke-width="5" stroke-linecap="round"/>
+        <circle cx="50" cy="50" r="5" fill="#33402f"/>
+      </svg>
+      <span class="clock-t" id="clockT">0분</span>
+      <button class="big-btn" id="wait">⏩ 40분 기다리기</button>
+    </div>
+    <div class="msg" id="m1">두 깻잎 모종 모두 봉지를 씌우고 고무줄로 묶었어요.<br><small>노란 식용유 막이 물 표면의 증발을 막아요</small></div>
+  </section>
+
+  <!-- 3. 무순과 보리 -->
+  <section class="panel" id="p2">
+    <div class="guide"><span class="q">해 보기</span>단추를 눌러 무순과 보리를 견주어 보세요!</div>
+    <div class="stage">
+      <svg id="sproutSvg" viewBox="0 0 640 430" aria-label="무순과 보리 새싹">
+        <rect x="0" y="222" width="640" height="208" fill="#ecd7b9"/>
+        <path d="M0 222 H640" stroke="#a8662b" stroke-width="4"/>
+        <line x1="320" y1="10" x2="320" y2="420" stroke="#e4eae0" stroke-width="3" stroke-dasharray="8 8"/>
+        <text x="160" y="34" font-size="30" text-anchor="middle" fill="#33402f">무순</text>
+        <text x="470" y="34" font-size="30" text-anchor="middle" fill="#33402f">보리</text>
+        <!-- 무순 -->
+        <path d="M168 222 C166 190 172 150 168 122" stroke="#efd7df" stroke-width="8" fill="none" stroke-linecap="round"/>
+        <g class="part" data-k="leaf">
+          <g class="part" data-k="vein">
+            <path d="M168 122 C150 92 98 72 84 104 C74 132 130 140 168 122 Z" fill="#7cc96a" stroke="#3a8a3f" stroke-width="2"/>
+            <path d="M168 122 C186 92 238 72 252 104 C262 132 206 140 168 122 Z" fill="#7cc96a" stroke="#3a8a3f" stroke-width="2"/>
+            <g fill="none" stroke-width="1.6" stroke-linecap="round">
+              <path class="vein" d="M168 122 L96 106 M140 115 L124 92 M140 115 L130 130 M118 110 L102 92 M118 110 L108 126 M126 98 L112 100 M124 124 L114 118"/>
+              <path class="vein" d="M168 122 L240 106 M196 115 L212 92 M196 115 L206 130 M218 110 L234 92 M218 110 L228 126 M210 98 L224 100 M212 124 L222 118"/>
+            </g>
+          </g>
+        </g>
+        <g class="part" data-k="root" fill="none" stroke="#f4ecdc" stroke-linecap="round">
+          <path d="M168 222 C170 270 164 330 168 400" stroke-width="7"/>
+          <g stroke-width="3"><path d="M168 255 L140 275 M168 255 L196 272 M167 290 L136 312 M168 292 L200 310 M167 330 L142 350 M168 335 L194 352 M168 365 L150 380 M168 368 L186 382"/></g>
+        </g>
+        <!-- 보리 -->
+        <g class="part" data-k="leaf">
+          <g class="part" data-k="vein">
+            <path d="M462 222 C456 150 470 86 520 30 C494 92 490 152 486 222 Z" fill="#8bd06f" stroke="#3a8a3f" stroke-width="2"/>
+            <g fill="none" stroke-width="1.4"><path class="vein" d="M467 220 C462 152 474 92 514 38"/><path class="vein" d="M474 220 C470 152 480 92 517 34"/><path class="vein" d="M481 220 C478 152 486 96 518 36"/></g>
+          </g>
+        </g>
+        <ellipse cx="474" cy="230" rx="15" ry="9" fill="#d8b56a" stroke="#a9853a" stroke-width="2"/>
+        <g class="part" data-k="root" fill="none" stroke="#f4ecdc" stroke-width="3" stroke-linecap="round">
+          <path d="M474 238 C470 280 456 320 448 362"/><path d="M474 238 C478 285 488 320 500 365"/><path d="M472 238 C460 270 438 300 420 330"/>
+          <path d="M476 238 C490 270 512 300 528 330"/><path d="M473 239 C472 290 468 330 470 372"/><path d="M470 238 C454 262 430 280 412 292"/><path d="M478 238 C494 262 518 278 536 288"/>
+        </g>
+        <!-- 이름표 -->
+        <g class="plab" data-k="leaf"><text x="168" y="70" font-size="26" text-anchor="middle" fill="#21794a">떡잎 2장</text>
+          <text x="560" y="96" font-size="24" text-anchor="middle" fill="#21794a">처음 나온 잎 1장</text>
+          <rect x="340" y="250" width="226" height="40" rx="12" fill="#fffbea" stroke="#f3df8f" stroke-width="2"/>
+          <text x="453" y="277" font-size="18" text-anchor="middle" fill="#8a6500">보리의 떡잎 1장은 씨 속에 남아요</text>
+          <path d="M466 250 L472 242" stroke="#e0ac1c" stroke-width="3" stroke-linecap="round"/></g>
+        <g class="plab" data-k="vein"><text x="60" y="170" font-size="26" fill="#d46b00">그물맥</text>
+          <text x="532" y="150" font-size="26" fill="#d46b00">나란히맥</text></g>
+        <g class="plab" data-k="root"><text x="206" y="300" font-size="24" fill="#8f531c">원뿌리와</text><text x="206" y="328" font-size="24" fill="#8f531c">곁뿌리</text>
+          <text x="540" y="350" font-size="24" fill="#8f531c">수염뿌리</text></g>
+      </svg>
+    </div>
+    <div class="pbtns">
+      <button class="pbtn" data-k="leaf">🌱 처음 나온 잎</button>
+      <button class="pbtn" data-k="vein">🍃 잎맥</button>
+      <button class="pbtn" data-k="root">🥢 뿌리</button>
+    </div>
+    <div class="msg" id="m2">세 단추를 모두 눌러 보세요.<br><small>떡잎 · 잎맥 · 뿌리가 어떻게 다를까요?</small></div>
+    <div class="sort" id="sort" hidden>
+      <div class="guide"><span class="q">나눠 보기</span>식물 카드를 알맞은 상자로 끌어 넣어 보세요!</div>
+      <div class="zones">
+        <div class="zone di" data-z="di"><div class="zone-h">쌍떡잎식물<small>떡잎 2장 · 그물맥 · 원뿌리와 곁뿌리</small></div><div class="zone-in"></div></div>
+        <div class="zone mo" data-z="mo"><div class="zone-h">외떡잎식물<small>떡잎 1장 · 나란히맥 · 수염뿌리</small></div><div class="zone-in"></div></div>
+      </div>
+      <div class="cards" id="cards"></div>
+    </div>
+  </section>
+
+  <!-- 4. OX 퀴즈 -->
+  <section class="panel" id="p3">
+    <div class="quiz">
+      <div class="qtop"><span id="qnum">1 / 5</span><span>맞힌 문제 <b id="score">0</b>개</span></div>
+      <div class="qcard" id="qtext"></div>
+      <div class="ox"><button class="o" data-a="O" aria-label="O">O</button><button class="x" data-a="X" aria-label="X">X</button></div>
+      <div class="msg" id="m3">맞으면 O, 틀리면 X를 눌러요!</div>
+      <div class="row"><button class="big-btn" id="next" hidden>다음 문제 ▶</button></div>
+    </div>
+  </section>
+</main>
+
+<footer>어게인 실험과학 수학학원<br>교육문의 010.2976.5774</footer>
+
+<div class="finale" id="finale" hidden>
+  <div class="finale-card">
+    <div class="big">💧</div>
+    <h2>완성!<br>방울이의 여행을 끝까지 따라갔어요</h2>
+    <div class="path">뿌리털 → 물관 → 잎맥 → 기공 → 수증기</div>
+    <button class="big-btn" id="finaleClose">닫기</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<canvas id="fx"></canvas>
+
+<script>
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+/* ---------- 소리 ---------- */
+let ac;
+function audio() { return ac = ac || new (window.AudioContext || window.webkitAudioContext)(); }
+function tone(f, d = .15, type = 'sine', at = 0, v = .18) {
+  try {
+    const a = audio(), t = a.currentTime + at, o = a.createOscillator(), g = a.createGain();
+    o.type = type; o.frequency.value = f;
+    g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(.001, t + d);
+    o.connect(g).connect(a.destination); o.start(t); o.stop(t + d);
+  } catch (e) {}
+}
+const sfx = {
+  pop: () => { tone(520, .09, 'triangle'); tone(780, .1, 'triangle', .06); },
+  good: () => [523, 659, 784, 1047].forEach((f, i) => tone(f, .25, 'triangle', i * .09)),
+  boing: () => { tone(330, .12, 'sine', 0, .12); tone(262, .22, 'sine', .1, .12); },
+  drip: () => { tone(880, .08, 'sine', 0, .14); tone(1320, .14, 'sine', .05, .1); },
+  chime: () => [1047, 1319, 1568, 2093].forEach((f, i) => tone(f, 1.4, 'sine', i * .18, .09))
+};
+addEventListener('pointerdown', () => { try { audio().resume(); } catch (e) {} }, { once: true });
+
+/* ---------- 색종이 · 반짝이 ---------- */
+const cv = $('#fx'), cx = cv.getContext('2d');
+let parts = [], running = false;
+const COLORS = ['#2f9e57', '#ffd34d', '#3aa0e0', '#8fcf5a', '#ef6a5f', '#b38cf0', '#ff8a2a'];
+function resize() { cv.width = innerWidth * devicePixelRatio; cv.height = innerHeight * devicePixelRatio; }
+addEventListener('resize', resize); resize();
+function burst(x, y, n = 80, star = false) {
+  for (let i = 0; i < n; i++) {
+    const a = Math.random() * Math.PI * 2, sp = (star ? 3 : 5) + Math.random() * (star ? 4 : 9);
+    parts.push({ x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - (star ? 1 : 6), r: Math.random() * 6.28, vr: (Math.random() - .5) * .3,
+      s: 6 + Math.random() * 6, c: COLORS[i % COLORS.length], life: star ? 45 : 140, star });
+  }
+  if (!running) { running = true; requestAnimationFrame(loop); }
+}
+function confetti() {
+  burst(innerWidth * .25, innerHeight * .45, 70); burst(innerWidth * .75, innerHeight * .45, 70);
+  setTimeout(() => burst(innerWidth * .5, innerHeight * .35, 90), 250);
+}
+function sparkleAt(el) { const r = el.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2, 18, true); }
+function drawStar(s) { cx.beginPath(); for (let i = 0; i < 10; i++) { const rr = i % 2 ? s / 2.4 : s, a = i * Math.PI / 5; cx.lineTo(Math.cos(a) * rr, Math.sin(a) * rr); } cx.fill(); }
+function loop() {
+  const k = devicePixelRatio; cx.clearRect(0, 0, cv.width, cv.height);
+  parts = parts.filter(p => p.life-- > 0);
+  for (const p of parts) {
+    p.vy += p.star ? .12 : .25; p.vx *= .985; p.x += p.vx; p.y += p.vy; p.r += p.vr;
+    cx.save(); cx.translate(p.x * k, p.y * k); cx.rotate(p.r); cx.globalAlpha = Math.min(1, p.life / 30); cx.fillStyle = p.c;
+    if (p.star) drawStar(p.s * k); else cx.fillRect(-p.s * k / 2, -p.s * k / 4, p.s * k, p.s * k / 2);
+    cx.restore();
+  }
+  if (parts.length) requestAnimationFrame(loop); else { running = false; cx.clearRect(0, 0, cv.width, cv.height); }
+}
+
+/* ---------- 공통 ---------- */
+function say(el, text, kind = '') { el.className = 'msg'; void el.offsetWidth; if (kind) el.classList.add(kind); el.innerHTML = text; }
+function toast(t) { const el = $('#toast'); el.textContent = t; el.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('on'), 2000); }
+let finaleShown = false;
+function done(i) {
+  const t = $$('.tab')[i];
+  if (t.classList.contains('done')) return;
+  t.classList.add('done'); sfx.good(); sparkleAt(t);
+  if (!finaleShown && $$('.tab.done').length === 4) { finaleShown = true; setTimeout(finale, 1500); }
+}
+function finale() { $('#finale').hidden = false; sfx.chime(); confetti(); setTimeout(confetti, 800); }
+$('#finaleClose').onclick = () => { $('#finale').hidden = true; sfx.pop(); };
+
+$('#share').onclick = async () => {
+  const url = location.href;
+  if (navigator.share) { try { await navigator.share({ title: '물방울의 여행', text: '어게인 실험과학 수학학원 · 물방울의 여행', url }); return; } catch (e) { if (e.name === 'AbortError') return; } }
+  try { await navigator.clipboard.writeText(url); }
+  catch (e) { const ta = document.createElement('textarea'); ta.value = url; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); }
+  toast('주소가 복사됐어요');
+};
+
+$$('.tab').forEach(t => t.onclick = () => {
+  $$('.tab').forEach(x => x.classList.toggle('on', x === t));
+  $$('.panel').forEach((p, i) => p.classList.toggle('on', i == t.dataset.t));
+  sfx.pop();
+});
+
+/* ---------- 1. 방울이 따라가기 ---------- */
+const svg1 = $('#tripSvg'), route = $('#route'), donePath = $('#done'), bangul = $('#bangul');
+const LEN = route.getTotalLength(), STEP = 4;
+const PTS = Array.from({ length: Math.ceil(LEN / STEP) + 1 }, (_, i) => route.getPointAtLength(Math.min(i * STEP, LEN)));
+const nearestIdx = (x, y) => PTS.reduce((b, p, i) => (Math.hypot(p.x - x, p.y - y) < Math.hypot(PTS[b].x - x, PTS[b].y - y) ? i : b), 0);
+const STOPS = [nearestIdx(215, 478), nearestIdx(320, 150), nearestIdx(480, 113), PTS.length - 1];
+const CAPS = [
+  '<b>뿌리털</b>이 흙 속의 물을 빨아들여요',
+  '줄기의 <b>물관</b>을 따라 위로 올라가요',
+  '<b>잎맥</b>을 따라 잎 구석구석으로 퍼져요',
+  '잎 속에서 수증기가 되어 <b>기공</b>으로 빠져나가요'
+];
+let cur = 0, stage = 0, dragging = false;
+donePath.style.strokeDasharray = LEN;
+function place() {
+  const p = PTS[cur];
+  bangul.setAttribute('transform', `translate(${p.x} ${p.y})`);
+  donePath.style.strokeDashoffset = LEN - cur * STEP;
+}
+function toSvg(e) { const m = svg1.getScreenCTM().inverse(); return new DOMPoint(e.clientX, e.clientY).matrixTransform(m); }
+bangul.addEventListener('pointerdown', e => {
+  if (stage >= 4) return;
+  e.preventDefault(); dragging = true; bangul.setPointerCapture(e.pointerId); sfx.pop();
+});
+bangul.addEventListener('pointermove', e => {
+  if (!dragging) return;
+  const q = toSvg(e);
+  let best = cur, bd = Infinity;
+  for (let i = cur; i <= Math.min(cur + 25, PTS.length - 1); i++) {   // 앞으로 조금씩만 갈 수 있어요
+    const d = Math.hypot(PTS[i].x - q.x, PTS[i].y - q.y); if (d < bd) { bd = d; best = i; }
+  }
+  if (bd > 80 || best === cur) return;
+  cur = best; place();
+  while (stage < 4 && cur >= STOPS[stage]) reach(++stage);
+});
+['pointerup', 'pointercancel'].forEach(t => bangul.addEventListener(t, () => { dragging = false; }));
+
+function reach(s) {
+  $$(`#tripSvg .lab[data-s="${s}"]`).forEach(l => l.classList.add('on'));
+  $(`.steps span[data-s="${s}"]`).classList.add('on');
+  say($('#m0'), CAPS[s - 1], 'good');
+  sparkleAt(bangul); sfx.drip();
+  if (s === 4) finishTrip();
+}
+async function finishTrip() {
+  dragging = false;
+  bangul.classList.add('go'); bangul.style.opacity = 0;
+  $$('.wisp').forEach(w => { w.classList.remove('go'); void w.getBBox(); w.classList.add('go'); });
+  await sleep(1200);
+  const z = $('#zoom'); z.classList.add('open'); z.innerHTML = stomataSvg() + '<p>잎 뒷면에는 아주 작은 구멍,<br><b>기공</b>이 가득해요</p>';
+  sfx.pop();
+  await sleep(1400);
+  const m = $('#merc'); m.setAttribute('y', 152); m.setAttribute('height', 80);
+  $('#mercDown').setAttribute('opacity', 1);
+  say($('#m0'), '물이 수증기가 될 때 열을 가져가서<br><b>잎이 시원해져요</b>', 'good');
+  confetti(); done(0);
+}
+function stomataSvg() {
+  let s = '';
+  for (let r = -4; r <= 4; r++) for (let c = -4; c <= 4; c++) {
+    const x = c * 22 + (r % 2 ? 11 : 0) + (Math.random() * 6 - 3), y = r * 20 + (Math.random() * 6 - 3);
+    if (Math.hypot(x, y) > 82) continue;
+    const a = Math.random() * 60 - 30;
+    s += `<g transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${a.toFixed(0)})"><ellipse cx="-3.2" rx="3.6" ry="7" fill="#4f9a3e"/><ellipse cx="3.2" rx="3.6" ry="7" fill="#4f9a3e"/><ellipse rx="1.3" ry="5" fill="#173d1c"/></g>`;
+  }
+  return `<svg viewBox="-110 -110 250 250" aria-label="잎 뒷면 확대"><defs><clipPath id="lens"><circle r="92"/></clipPath></defs>
+    <path d="M62 62 L118 118" stroke="#8a6a3c" stroke-width="18" stroke-linecap="round"/>
+    <circle r="92" fill="#a7dc8a"/><g clip-path="url(#lens)">${s}</g>
+    <circle r="92" fill="none" stroke="#33402f" stroke-width="9"/><path d="M-60 -50 A78 78 0 0 1 -20 -78" stroke="#fff" stroke-width="6" fill="none" opacity=".7" stroke-linecap="round"/></svg>`;
+}
+$('#reset0').onclick = () => {
+  cur = 0; stage = 0; place(); sfx.pop();
+  bangul.classList.remove('go'); bangul.style.opacity = 1;
+  $$('#tripSvg .lab, .steps span').forEach(l => l.classList.remove('on'));
+  $$('.wisp').forEach(w => w.classList.remove('go'));
+  const m = $('#merc'); m.setAttribute('y', 128); m.setAttribute('height', 104); $('#mercDown').setAttribute('opacity', 0);
+  $('#zoom').classList.remove('open');
+  $('#zoom').innerHTML = '<div class="zoom-empty"><div class="ic">🔍</div>방울이를 기공까지 데려가면<br>잎 뒷면 돋보기가 열려요</div>';
+  say($('#m0'), '방울이는 지금 흙 속에 있어요.<br><small>방울이를 꾹 눌러 끌어 보세요</small>');
+};
+place();
+
+/* ---------- 2. 봉지 실험 ---------- */
+const MM = 7, W0 = 250;                         // 1mm = 7칸(크게 보이게), 처음 물 높이
+const SUN = ['약함', '보통', '강함'];
+const LEAFY = { drop: [2, 3, 5], drops: [7, 13, 22], fog: [.3, .5, .72] };
+const BARE = { drop: [.3, .5, .5], drops: [0, 1, 1], fog: [.03, .05, .07] };
+const DROPS = Array.from({ length: 22 }, (_, i) => { const a = i * 2.4, r = 20 + (i * 37 % 50); return [150 + Math.cos(a) * r * 1.15, 110 + Math.sin(a) * r * 1.3]; });
+const tubes = [{ name: 'A', leaf: true }, { name: 'B', leaf: false }];
+function tubeSvg(i) {
+  const c = 150, L = c - 34, R = c + 34;
+  let ticks = '';
+  for (let m = 0; m <= 8; m++) ticks += `<line x1="${R + 22}" x2="${R + (m % 5 ? 30 : 36)}" y1="${W0 + m * MM}" y2="${W0 + m * MM}"/>`;
+  const drops = DROPS.map(([x, y]) => `<circle class="dr" cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="${4 + (x * 7 % 3)}" fill="#bfe6fb" stroke="#6fbbe8" stroke-width="1.5" opacity="0"/>`).join('');
+  const leaf = (x, y, s) => `<path d="M${c} ${y} C${c + s * 20} ${y - 26} ${c + s * 62} ${y - 22} ${c + s * 70} ${y - 6} C${c + s * 56} ${y + 14} ${c + s * 20} ${y + 14} ${c} ${y} Z" fill="#6bbd5b" stroke="#3a8a3f" stroke-width="2"/><path d="M${c} ${y} L${c + s * 66} ${y - 6}" stroke="#2f7a35" stroke-width="1.3" opacity=".7"/>`;
+  const stub = (y, s) => `<path d="M${c} ${y} l${s * 9} -5" stroke="#4e9a46" stroke-width="5" stroke-linecap="round"/>`;
+  return `<svg viewBox="0 0 300 470" aria-label="시험관 ${tubes[i].name}">
+    <defs><clipPath id="in${i}"><path d="M${L + 4} 196 V430 a30 30 0 0 0 60 0 V196 Z"/></clipPath></defs>
+    <path class="bag" d="M${L - 2} 196 C${c - 92} 150 ${c - 100} 40 ${c - 44} 18 Q${c} 4 ${c + 44} 18 C${c + 100} 40 ${c + 92} 150 ${R + 2} 196 Z" fill="#f4fbff" stroke="#9fc9e0" stroke-width="3"/>
+    <path class="fog" d="M${L - 2} 196 C${c - 92} 150 ${c - 100} 40 ${c - 44} 18 Q${c} 4 ${c + 44} 18 C${c + 100} 40 ${c + 92} 150 ${R + 2} 196 Z" fill="#cfe4ef" opacity="0"/>
+    <g clip-path="url(#in${i})">
+      <rect class="water" x="${L}" y="${W0}" width="68" height="250" fill="#8ccdf2" opacity=".75"/>
+      <rect class="oil" x="${L}" y="${W0 - 6}" width="68" height="7" fill="#f5c84c"/>
+    </g>
+    <path d="M${c} 440 V60" stroke="#5aa94c" stroke-width="7" stroke-linecap="round"/>
+    <g stroke="#e8dcc0" stroke-width="2.5" stroke-linecap="round"><path d="M${c} 438 l-14 14 M${c} 438 l14 12 M${c} 440 v16 M${c} 436 l-20 4 M${c} 436 l20 6"/></g>
+    ${tubes[i].leaf ? leaf(0, 70, -1) + leaf(0, 70, 1) + leaf(0, 120, -1) + leaf(0, 120, 1) + `<path d="M${c} 62 C${c - 8} 48 ${c - 2} 38 ${c} 32 C${c + 6} 40 ${c + 6} 52 ${c} 62Z" fill="#7cc96a"/>` : stub(70, -1) + stub(70, 1) + stub(120, -1) + stub(120, 1)}
+    <path d="M${L} 192 V430 a34 34 0 0 0 68 0 V192" fill="none" stroke="#a9cfe4" stroke-width="5"/>
+    <line x1="${R - 10}" x2="${R - 10}" y1="220" y2="420" stroke="#fff" stroke-width="5" opacity=".7" stroke-linecap="round"/>
+    <line x1="${L - 10}" x2="${R + 10}" y1="${W0}" y2="${W0}" stroke="#e5484d" stroke-width="3"/>
+    <text x="${L - 14}" y="${W0 + 6}" font-size="15" text-anchor="end" fill="#e5484d">펜 줄</text>
+    <rect x="${L - 6}" y="187" width="80" height="11" rx="5" fill="#c47a3a"/>
+    <g class="drops">${drops}</g>
+    <rect x="${R + 18}" y="${W0 - 10}" width="26" height="${8 * MM + 20}" rx="4" fill="#fffbea" stroke="#e0c873" stroke-width="2"/>
+    <rect class="gap" x="${R + 20}" y="${W0}" width="7" height="0" fill="#3aa0e0"/>
+    <g stroke="#8a6500" stroke-width="1.5">${ticks}</g>
+    <text x="${R + 31}" y="${W0 + 8 * MM + 28}" font-size="14" text-anchor="middle" fill="#8a6500">mm</text>
+  </svg>`;
+}
+function drawTubes() {
+  $('#tubes').innerHTML = tubes.map((t, i) => `<div class="tube-card" data-i="${i}">
+    <h3>깻잎 모종 ${t.name}</h3>
+    <div class="tog"><button data-v="1" class="${t.leaf ? 'on' : ''}">🍃 잎 있음</button><button data-v="0" class="${t.leaf ? '' : 'on'}">✂️ 잎 없음</button></div>
+    ${tubeSvg(i)}<div class="result"></div></div>`).join('');
+  $$('.tog button').forEach(b => b.onclick = () => {
+    const i = +b.closest('.tube-card').dataset.i; tubes[i].leaf = b.dataset.v === '1'; sfx.pop(); resetRun(); drawTubes();
+  });
+}
+let ran = false, busy = false;
+function resetRun() {
+  ran = false; $('#wait').disabled = false; $('#hand').style.transition = 'none'; $('#hand').style.transform = 'rotate(0deg)'; $('#clockT').textContent = '0분';
+  say($('#m1'), '조건을 바꿨어요. <b>40분 기다리기</b>를 눌러 보세요!');
+}
+$('#sun').oninput = () => {
+  const v = +$('#sun').value;
+  $$('.sunlabels span').forEach((s, i) => s.classList.toggle('on', i === v));
+  sfx.pop(); if (ran) { resetRun(); drawTubes(); }
+};
+function setTube(card, k, f) {
+  const d = k.drop * f;
+  card.querySelector('.water').setAttribute('y', W0 + d * MM);
+  card.querySelector('.oil').setAttribute('y', W0 + d * MM - 6);
+  card.querySelector('.gap').setAttribute('height', d * MM);
+  card.querySelector('.fog').setAttribute('opacity', k.fog * f);
+  card.querySelectorAll('.dr').forEach((c, j) => c.setAttribute('opacity', j < k.drops * f ? .95 : 0));
+}
+$('#wait').onclick = async () => {
+  if (busy || ran) return;
+  busy = true; $('#wait').disabled = true; sfx.pop();
+  const sun = +$('#sun').value, cards = $$('.tube-card');
+  const ks = tubes.map(t => { const k = t.leaf ? LEAFY : BARE; return { drop: k.drop[sun], drops: k.drops[sun], fog: k.fog[sun] }; });
+  const h = $('#hand'); h.style.transition = 'transform 2s ease-in-out'; void h.getBBox(); h.style.transform = 'rotate(240deg)';
+  const t0 = performance.now();
+  await new Promise(res => {
+    const step = now => {
+      const f = Math.min(1, (now - t0) / 2000);
+      $('#clockT').textContent = Math.round(f * 40) + '분';
+      cards.forEach((c, i) => setTube(c, ks[i], f));
+      f < 1 ? requestAnimationFrame(step) : res();
+    };
+    requestAnimationFrame(step);
+  });
+  cards.forEach((c, i) => c.querySelector('.result').textContent = tubes[i].leaf ? `💧 물이 약 ${ks[i].drop}mm 줄었어요` : '거의 그대로예요');
+  busy = false; ran = true;
+  const leafy = tubes.filter(t => t.leaf).length;
+  if (leafy === 1) {
+    say($('#m1'), `잎이 있어야 물이 수증기로 빠져나가요.<br><b>이것이 증산 작용이에요.</b><small>햇빛 세기를 바꿔 보세요. 햇빛이 강할수록 물방울이 더 많이 맺히고 물도 더 줄어요</small>`, 'good');
+    sfx.good(); confetti(); done(1);
+  } else if (leafy === 2) say($('#m1'), '두 봉지 모두 뿌옇게 됐어요.<br><small>한쪽을 <b>잎 없음</b>으로 바꿔 견주어 볼까요?</small>', 'warn');
+  else say($('#m1'), '두 봉지 모두 거의 맑아요.<br><small>한쪽을 <b>잎 있음</b>으로 바꿔 견주어 볼까요?</small>', 'warn');
+};
+drawTubes();
+
+/* ---------- 3. 무순과 보리 ---------- */
+const PCAP = {
+  leaf: '무순은 둥근 <b>떡잎 2장</b>이 벌어졌어요.<br>보리는 가늘고 긴 잎이 1장 올라왔어요. <small>보리의 떡잎 1장은 씨 속에 남아요</small>',
+  vein: '무순은 물길이 그물처럼 갈라진 <b>그물맥</b>,<br>보리는 잎 끝까지 나란히 뻗은 <b>나란히맥</b>이에요',
+  root: '무순은 굵은 <b>원뿌리와 곁뿌리</b>,<br>보리는 비슷한 굵기의 뿌리가 수염처럼 난 <b>수염뿌리</b>예요'
+};
+const seen = new Set();
+$$('.pbtn').forEach(b => b.onclick = () => {
+  const k = b.dataset.k;
+  $$('.pbtn').forEach(x => x.classList.toggle('on', x === b));
+  $$('#sproutSvg .part').forEach(p => p.classList.toggle('hl', p.dataset.k === k));
+  $$('#sproutSvg .plab').forEach(p => p.classList.toggle('on', p.dataset.k === k));
+  b.classList.add('seen'); seen.add(k); sfx.drip();
+  say($('#m2'), PCAP[k], 'good');
+  if (seen.size === 3 && $('#sort').hidden) {
+    setTimeout(() => { $('#sort').hidden = false; sfx.good(); $('#sort').scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 1600);
+  }
+});
+const PLANTS = [
+  { n: '콩', em: '🫘', z: 'di', why: '콩은 떡잎이 2장 나오고 잎맥이 그물맥이에요' },
+  { n: '깻잎', em: '🌿', z: 'di', why: '깻잎은 잎맥이 그물처럼 퍼진 그물맥이에요' },
+  { n: '봉선화', em: '🌺', z: 'di', why: '봉선화는 떡잎이 2장 나와요' },
+  { n: '벼', em: '🌾', z: 'mo', why: '벼는 잎맥이 나란히맥이고 뿌리가 수염뿌리예요' },
+  { n: '옥수수', em: '🌽', z: 'mo', why: '옥수수는 떡잎이 1장이고 잎맥이 나란히맥이에요' },
+  { n: '강아지풀', em: '🌱', z: 'mo', why: '강아지풀은 잎이 가늘고 길며 나란히맥이에요' }
+];
+let placed = 0;
+$('#cards').innerHTML = PLANTS.map((p, i) => `<div class="pcard" data-i="${i}"><span class="em">${p.em}</span>${p.n}</div>`).join('');
+$$('.pcard').forEach(card => card.addEventListener('pointerdown', e => {
+  e.preventDefault(); sfx.pop();
+  const p = PLANTS[card.dataset.i];
+  const g = document.createElement('div'); g.className = 'ghost'; g.innerHTML = card.outerHTML; g.firstChild.style.width = card.offsetWidth + 'px';
+  document.body.appendChild(g); card.style.opacity = .3;
+  const zoneAt = ev => document.elementFromPoint(ev.clientX, ev.clientY)?.closest('.zone');
+  const mv = ev => { g.style.left = ev.clientX + 'px'; g.style.top = ev.clientY + 'px'; $$('.zone').forEach(z => z.classList.toggle('over', z === zoneAt(ev))); };
+  mv(e);
+  const up = ev => {
+    removeEventListener('pointermove', mv); removeEventListener('pointerup', up); removeEventListener('pointercancel', up);
+    g.remove(); card.style.opacity = 1; $$('.zone').forEach(z => z.classList.remove('over'));
+    const z = ev.type === 'pointerup' ? zoneAt(ev) : null;
+    if (!z) return;
+    if (z.dataset.z === p.z) {
+      card.remove(); z.querySelector('.zone-in').insertAdjacentHTML('beforeend', `<span class="chip">${p.em} ${p.n}</span>`);
+      sparkleAt(z); sfx.drip(); placed++;
+      if (placed === PLANTS.length) { say($('#m2'), '모두 맞혔어요! 🎉<br><b>떡잎이 2장이면 쌍떡잎식물, 1장이면 외떡잎식물</b>', 'good'); confetti(); done(2); }
+      else say($('#m2'), `딩동댕! ${p.why}.`, 'good');
+    } else {
+      card.classList.remove('back'); void card.offsetWidth; card.classList.add('back'); sfx.boing();
+      say($('#m2'), `다시 생각해 볼까요?<br><small>${p.why}</small>`, 'warn');
+    }
+  };
+  addEventListener('pointermove', mv); addEventListener('pointerup', up); addEventListener('pointercancel', up);
+}));
+
+/* ---------- 4. OX 퀴즈 ---------- */
+const QS = [
+  { q: '뿌리털은 흙 속의 물을 흡수한다.', a: 'O', why: '뿌리털은 뿌리 끝에 난 아주 가는 털로, 흙 속의 물을 흡수해요.' },
+  { q: '잎까지 올라간 물은 모두 잎 속에 고여 있다.', a: 'X', why: '잎까지 간 물은 기공을 통해 수증기로 빠져나가요. 이것이 증산 작용이에요.' },
+  { q: '깻잎의 기공은 앞면보다 뒷면에 더 많다.', a: 'O', why: '기공은 잎 표면, 주로 뒷면에 있어요. 깻잎도 뒷면에 더 많아요.' },
+  { q: '흐리고 축축한 날에 증산 작용이 가장 활발하다.', a: 'X', why: '증산 작용은 햇빛 쨍쨍하고 바람 부는 날에 가장 활발해요.' },
+  { q: '떡잎이 2장 나오는 식물은 쌍떡잎식물이다.', a: 'O', why: '떡잎이 2장이면 쌍떡잎식물, 1장이면 외떡잎식물이에요.' }
+];
+let qi = 0, score = 0;
+function showQ() {
+  $('#qnum').textContent = `${qi + 1} / ${QS.length}`; $('#qtext').textContent = QS[qi].q;
+  $$('.ox button').forEach(b => b.disabled = false); $('#next').hidden = true;
+  say($('#m3'), '맞으면 O, 틀리면 X를 눌러요!');
+}
+$$('.ox button').forEach(b => b.onclick = () => {
+  const Q = QS[qi], ok = b.dataset.a === Q.a;
+  $$('.ox button').forEach(x => x.disabled = x !== b);
+  if (ok) { score++; $('#score').textContent = score; sfx.good(); sparkleAt(b); say($('#m3'), `딩동댕! 정답은 <b>${Q.a}</b><small>${Q.why}</small>`, 'good'); }
+  else { sfx.boing(); say($('#m3'), `아쉬워요! 정답은 <b>${Q.a}</b><small>${Q.why}</small>`, 'warn'); }
+  $('#next').hidden = false; $('#next').textContent = qi < QS.length - 1 ? '다음 문제 ▶' : '결과 보기 ▶';
+});
+$('#next').onclick = () => {
+  sfx.pop();
+  if (qi < QS.length - 1) { qi++; showQ(); return; }
+  if (score === QS.length) { say($('#m3'), `${QS.length}문제를 모두 맞혔어요! 🎉<br><b>방울이 박사 인증!</b>`, 'good'); confetti(); done(3); }
+  else say($('#m3'), `${QS.length}문제 중 <b>${score}개</b> 맞혔어요!<br><small>틀린 문제를 다시 보면 모두 맞힐 수 있어요</small>`);
+  $('#qtext').textContent = '수고했어요!'; $$('.ox button').forEach(x => x.disabled = true);
+  $('#next').textContent = '다시 풀기 ↺';
+  $('#next').onclick = () => { qi = 0; score = 0; $('#score').textContent = 0; $('#next').onclick = nextHandler; sfx.pop(); showQ(); };
+};
+const nextHandler = $('#next').onclick;
+showQ();
+</script>
+</body>
+</html>
